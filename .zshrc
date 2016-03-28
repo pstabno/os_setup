@@ -1,93 +1,84 @@
-# Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
-HISTSIZE=100000
-SAVEHIST=100000
-setopt autocd beep
-bindkey -v
-# End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
-zstyle :compinstall filename '/home/p/.zshrc'
+# Path to your oh-my-zsh installation.
+  export ZSH=/home/p/.oh-my-zsh
 
-autoload -Uz compinit
-compinit
-# End of lines added by compinstall
+# Set name of the theme to load.
+# Look in ~/.oh-my-zsh/themes/
+# Optionally, if you set this to "random", it'll load a random theme each
+# time that oh-my-zsh is loaded.
+ZSH_THEME="agnosterzak"
 
-alias vi="vim"
-alias l='ls -AF'
-alias ll='ls -lF'
-alias rdb='rm /var/lib/pacman/db.lck'
-alias ins='pacman -S'
-alias pyt='python2.7'
-setopt PROMPT_SUBST
-PROMPT='%{$(pwd|grep --color=always /)%${#PWD}G%} %(!.%F{red}.%F{cyan})%n%f@%F{yellow}%m%f%(!.%F{red}.)% -> '
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
 
-# heavily inspired by the wonderful pure theme
-# https://github.com/sindresorhus/pure
+# Uncomment the following line to use hyphen-insensitive completion. Case
+# sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
 
-# needed to get things like current git branch
-autoload -Uz vcs_info
-zstyle ':vcs_info:*' enable git # You can add hg too if needed: `git hg`
-zstyle ':vcs_info:git*' use-simple true
-zstyle ':vcs_info:git*' max-exports 2
-zstyle ':vcs_info:git*' formats ' %b' 'x%R'
-zstyle ':vcs_info:git*' actionformats ' %b|%a' 'x%R'
+# Uncomment the following line to disable bi-weekly auto-update checks.
+# DISABLE_AUTO_UPDATE="true"
 
-autoload colors && colors
+# Uncomment the following line to change how often to auto-update (in days).
+# export UPDATE_ZSH_DAYS=13
 
-git_dirty() {
-    # check if we're in a git repo
-    command git rev-parse --is-inside-work-tree &>/dev/null || return
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
 
-    # check if it's dirty
-    command git diff --quiet --ignore-submodules HEAD &>/dev/null;
-    if [[ $? -eq 1 ]]; then
-        echo "%F{red}✗%f"
-    else
-        echo "%F{green}✔%f"
-    fi
-}
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
 
-# get the status of the current branch and it's remote
-# If there are changes upstream, display a ⇣
-# If there are changes that have been committed but not yet pushed, display a ⇡
-git_arrows() {
-    # do nothing if there is no upstream configured
-    command git rev-parse --abbrev-ref @'{u}' &>/dev/null || return
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
 
-    local arrows=""
-    local status
-    arrow_status="$(command git rev-list --left-right --count HEAD...@'{u}' 2>/dev/null)"
+# Uncomment the following line to display red dots whilst waiting for completion.
+# COMPLETION_WAITING_DOTS="true"
 
-    # do nothing if the command failed
-    (( !$? )) || return
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-    # split on tabs
-    arrow_status=(${(ps:\t:)arrow_status})
-    local left=${arrow_status[1]} right=${arrow_status[2]}
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# HIST_STAMPS="mm/dd/yyyy"
 
-    (( ${right:-0} > 0 )) && arrows+="%F{011}⇣%f"
-    (( ${left:-0} > 0 )) && arrows+="%F{012}⇡%f"
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
 
-    echo $arrows
-}
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(git)
 
+# User configuration
 
-# indicate a job (for example, vim) has been backgrounded
-# If there is a job in the background, display a ✱
-suspended_jobs() {
-    local sj
-    sj=$(jobs 2>/dev/null | tail -n 1)
-    if [[ $sj == "" ]]; then
-        echo ""
-    else
-        echo "%{$FG[208]%}✱%f"
-    fi
-}
+  export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"
+# export MANPATH="/usr/local/man:$MANPATH"
 
-#precmd() {
-#    vcs_info
-#    print -P '\n%F{205}%~'
-#}
+source $ZSH/oh-my-zsh.sh
 
-#export PROMPT='%(?.%F{205}.%F{red})❯%f '
-export RPROMPT='`git_dirty`%F{241}$vcs_info_msg_0_%f `git_arrows``suspended_jobs`'
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# ssh
+# export SSH_KEY_PATH="~/.ssh/dsa_id"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
